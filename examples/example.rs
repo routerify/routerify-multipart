@@ -1,27 +1,3 @@
-[![Github Actions Status](https://github.com/routerify/routerify-multipart/workflows/Test/badge.svg)](https://github.com/routerify/routerify-multipart/actions)
-[![crates.io](https://img.shields.io/crates/v/routerify-multipart.svg)](https://crates.io/crates/routerify-multipart)
-[![Documentation](https://docs.rs/routerify-multipart/badge.svg)](https://docs.rs/routerify-multipart)
-[![MIT](https://img.shields.io/crates/l/routerify-multipart.svg)](./LICENSE)
-
-# routerify-multipart
-
-A `multipart/form-data` parser for [`Routerify`](https://github.com/routerify/routerify).
-
-[Docs](https://docs.rs/routerify-multipart)
-
-## Install
-
-Add this to your `Cargo.toml` file:
-
-```toml
-[dependencies]
-routerify = "1.1"
-routerify-multipart = "1.0"
-```
-
-## Example
-
-```rust
 use hyper::{Body, Request, Response, Server, StatusCode};
 use routerify::{Error, Router, RouterService};
 // Import `RequestMultipartExt` trait.
@@ -84,8 +60,3 @@ async fn main() {
         eprintln!("Server error: {}", err);
     }
 }
-```
-
-## Contributing
-
-Your PRs and suggestions are always welcome.

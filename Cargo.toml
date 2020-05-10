@@ -1,0 +1,31 @@
+[package]
+name = "routerify-multipart"
+version = "1.0.0"
+description = "A multipart/form-data parser for Routerify."
+homepage = "https://github.com/routerify/routerify-multipart"
+repository = "https://github.com/routerify/routerify-multipart"
+keywords = ["routerify", "hyper-rs", "hyper", "multipart", "multipart-formdata"]
+categories = ["asynchronous", "web-programming", "web-programming::http-server"]
+authors = ["Rousan Ali <hello@rousan.io>"]
+readme = "README.md"
+license = "MIT"
+edition = "2018"
+
+[package.metadata.docs.rs]
+all-features = true
+
+[package.metadata.playground]
+features = ["all"]
+
+[features]
+default = []
+all = ["json"]
+json = ["multer/json"]
+
+[dependencies]
+routerify = "1.1"
+hyper = "0.13"
+multer = "1.0"
+
+[dev-dependencies]
+tokio = { version = "0.2", features = ["full"] }
