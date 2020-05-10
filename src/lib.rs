@@ -4,7 +4,7 @@
 //!
 //! # Examples
 //!
-//! ```
+//! ```no_run
 //! use hyper::{Body, Request, Response, Server, StatusCode};
 //! use routerify::{Error, Router, RouterService};
 //! // Import `RequestMultipartExt` trait.
