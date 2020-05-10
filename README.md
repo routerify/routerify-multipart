@@ -7,6 +7,8 @@
 
 A `multipart/form-data` parser for [`Routerify`](https://github.com/routerify/routerify).
 
+It's using [multer](https://github.com/rousan/multer-rs) to parse the `multipart/form-data` content.
+
 [Docs](https://docs.rs/routerify-multipart)
 
 ## Install
