@@ -88,6 +88,67 @@ async fn main() {
 }
 ``` 
 
+## Prevent DDoS Attack
+This crate also provides some APIs to prevent potential `DDoS attack` with fine grained control. It's recommended to add some constraints
+on field (specially text field) size to avoid potential `DDoS attack` from attackers running the server out of memory.
+
+An example:
+
+```rust
+use hyper::{Body, Request, Response, Server, StatusCode};
+use routerify::{Error, Router, RouterService};
+// Import `RequestMultipartExt` trait and other types.
+use routerify_multipart::{RequestMultipartExt, Constraints, SizeLimit};
+use std::net::SocketAddr;
+
+// A handler to handle file uploading in `multipart/form-data` content-type.
+async fn file_upload_handler(req: Request<Body>) -> Result<Response<Body>, Error> {
+    // Create some constraints to be applied to the fields to prevent DDoS attack.
+     let constraints = Constraints::new()
+         // We only accept `my_text_field` and `my_file_field` fields,
+         // For any unknown field, we will throw an error.
+         .allowed_fields(vec!["my_text_field", "my_file_field"])
+         .size_limit(
+             SizeLimit::new()
+                 // Set 15mb as size limit for the whole stream body.
+                 .whole_stream(15 * 1024 * 1024)
+                 // Set 10mb as size limit for all fields.
+                 .per_field(10 * 1024 * 1024)
+                 // Set 30kb as size limit for our text field only.
+                 .for_field("my_text_field", 30 * 1024),
+          );
+
+    // Convert the request into a `Multipart` instance.
+    let mut multipart = match req.into_multipart_with_constraints(constraints) {
+        Ok(m) => m,
+        Err(err) => {
+            return Ok(Response::builder()
+                .status(StatusCode::BAD_REQUEST)
+                .body(Body::from(format!("Bad Request: {}", err)))
+                .unwrap());
+        }
+    };
+
+    // Iterate over the fields.
+    while let Some(mut field) = multipart.next_field().await.map_err(|err| Error::wrap(err))? {
+        // Get the field name.
+        let name = field.name();
+        // Get the field's filename if provided in "Content-Disposition" header.
+        let file_name = field.file_name();
+
+        println!("Name {:?}, File name: {:?}", name, file_name);
+
+        // Process the field data chunks e.g. store them in a file.
+        while let Some(chunk) = field.chunk().await.map_err(|err| Error::wrap(err))? {
+            // Do something with field chunk.
+            println!("Chunk: {:?}", chunk);
+        }
+    }
+
+    Ok(Response::new(Body::from("Success")))
+}
+```
+
 ## Contributing
 
 Your PRs and suggestions are always welcome.

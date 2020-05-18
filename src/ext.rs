@@ -1,4 +1,4 @@
-use crate::Multipart;
+use crate::{Constraints, Multipart};
 use hyper::{header, Request};
 
 /// An extension trait which extends [`hyper::Request<Body>`](https://docs.rs/hyper/0.13.5/hyper/struct.Request.html)
@@ -10,6 +10,13 @@ pub trait RequestMultipartExt {
     ///
     /// This method fails if the request body is not `multipart/form-data` and in this case, you could send a `400 Bad Request` status.
     fn into_multipart(self) -> routerify::Result<Multipart>;
+
+    /// Convert the request body to [`Multipart`](./struct.Multipart.html) if the `content-type` is `multipart/form-data` with some [constraints](./struct.Constraints.html).
+    ///
+    /// # Errors
+    ///
+    /// This method fails if the request body is not `multipart/form-data` and in this case, you could send a `400 Bad Request` status.
+    fn into_multipart_with_constraints(self, constraints: Constraints) -> routerify::Result<Multipart>;
 }
 
 impl RequestMultipartExt for Request<hyper::Body> {
@@ -22,6 +29,20 @@ impl RequestMultipartExt for Request<hyper::Body> {
 
         if let Some(boundary) = boundary {
             Ok(Multipart::new(self.into_body(), boundary))
+        } else {
+            Err(routerify::Error::new("Content-Type is not multipart/form-data"))
+        }
+    }
+
+    fn into_multipart_with_constraints(self, constraints: Constraints) -> routerify::Result<Multipart> {
+        let boundary = self
+            .headers()
+            .get(header::CONTENT_TYPE)
+            .and_then(|val| val.to_str().ok())
+            .and_then(|val| multer::parse_boundary(val).ok());
+
+        if let Some(boundary) = boundary {
+            Ok(Multipart::new_with_constraints(self.into_body(), boundary, constraints))
         } else {
             Err(routerify::Error::new("Content-Type is not multipart/form-data"))
         }
