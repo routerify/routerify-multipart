@@ -18,7 +18,7 @@ Add this to your `Cargo.toml` file:
 ```toml
 [dependencies]
 routerify = "1.1"
-routerify-multipart = "1.0"
+routerify-multipart = "1.1"
 ```
 
 ## Example
