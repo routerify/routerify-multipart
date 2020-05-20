@@ -1,6 +1,6 @@
 [package]
 name = "routerify-multipart"
-version = "1.0.2"
+version = "1.1.0"
 description = "A multipart/form-data parser for Routerify."
 homepage = "https://github.com/routerify/routerify-multipart"
 repository = "https://github.com/routerify/routerify-multipart"
@@ -25,7 +25,7 @@ json = ["multer/json"]
 [dependencies]
 routerify = "1.1"
 hyper = "0.13"
-multer = "1.1"
+multer = "1.2"
 
 [dev-dependencies]
 tokio = { version = "0.2", features = ["full"] }
