@@ -4,7 +4,7 @@ use routerify_multipart::RequestMultipartExt;
 use std::net::SocketAddr;
 
 async fn file_upload_handler(req: Request<Body>) -> Result<Response<Body>, Error> {
-    let mut multipart = req.into_multipart().map_err(|err| Error::wrap(err))?;
+    let mut multipart = req.into_multipart().map_err(|err| Error::new(err.to_string()))?;
 
     while let Some(field) = multipart.next_field().await.map_err(|err| Error::wrap(err))? {
         let name = field.name();
