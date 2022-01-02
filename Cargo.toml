@@ -1,6 +1,6 @@
 [package]
 name = "routerify-multipart"
-version = "2.0.0"
+version = "3.0.0"
 description = "A multipart/form-data parser for Routerify."
 homepage = "https://github.com/routerify/routerify-multipart"
 repository = "https://github.com/routerify/routerify-multipart"
@@ -23,8 +23,8 @@ all = ["json"]
 json = ["multer/json"]
 
 [dependencies]
-routerify = "2"
-hyper = "0.14"
+routerify = "3"
+hyper = { version = "0.14", default-features = false, features = ["stream"] }
 multer = "2"
 
 [dev-dependencies]
