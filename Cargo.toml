@@ -1,6 +1,6 @@
 [package]
 name = "routerify-multipart"
-version = "2.0.0"
+version = "3.0.0"
 description = "A multipart/form-data parser for Routerify."
 homepage = "https://github.com/routerify/routerify-multipart"
 repository = "https://github.com/routerify/routerify-multipart"
